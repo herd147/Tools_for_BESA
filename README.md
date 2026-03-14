@@ -2,3 +2,7 @@
 Some code which can be used for BESA swf and bsa processing
 
 excel_to_json: function to convert Excel-file to JSON file, optimized for Excel_table_template 
+
+readASCII: function that reads your .swf files and returns a numpy array
+
+plot_properly: functions for different plots (hp,irn or rho)
