@@ -6,3 +6,5 @@ excel_to_json: function to convert Excel-file to JSON file, optimized for Excel_
 readASCII: function that reads your .swf files and returns a numpy array
 
 plot_properly: functions for different plots (hp,irn or rho)
+
+sustained_new: processes your sustained field and compares between groups
