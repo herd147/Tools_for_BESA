@@ -10,3 +10,5 @@ plot_properly: functions for different plots (hp,irn or rho)
 sustained_new: processes your sustained field and compares between groups
 
 psychoacoustics_processing: optimized for Excel_table_template after conversion to .json, analyses psychoacoustic data automatically, with statistics and boxplot, saved into a text file
+
+simple_bca_bootstrap: Bootstraps all your npy. arrays
