@@ -16,3 +16,5 @@ simple_bca_bootstrap: Bootstraps all your npy. arrays
 bootstrap_t: inner and outer bootstrap, works with npy-files and self-defined slices
 
 bootstrap_ci_plot: plots bootstrap average and bootstrap-CI, works with bootstrap matrices (perform simple_bca_bootstrap first)
+
+single_mean_boot_curves_plot: Plots bootstrap mean curve above 100 random bootstrap curves, works with bootstrap matrices (perform simple_bca_bootstrap first)
