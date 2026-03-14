@@ -1,5 +1,5 @@
 import pandas as pd
-import os
+import os 
 
 def excel_to_json(excel_file, json_file=None):
     """
@@ -16,8 +16,8 @@ def excel_to_json(excel_file, json_file=None):
     file_name = os.path.splitext(excel_file)[0]
     
     # Convert columns with dates to datetime format 
-    df['Geburtsdatum'] = pd.to_datetime(df['Geburtsdatum'], errors='coerce')
-    df['Untersuchungsdatum'] = pd.to_datetime(df['Untersuchungsdatum'], errors='coerce')
+    df['Geburtsdatum'] = pd.to_datetime(df['Geburtsdatum'], errors='coerce') #Comment out if template not used
+    df['Untersuchungsdatum'] = pd.to_datetime(df['Untersuchungsdatum'], errors='coerce') #Comment out if template not used
     
     # Save JSON File and add a number to the file name if it already exists
     if json_file is None:
