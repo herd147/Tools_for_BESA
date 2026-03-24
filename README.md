@@ -20,3 +20,5 @@ bootstrap_quality_scatters: if you try different slice-values you can optimize t
 bootstrap_t: inner and outer bootstrap, works with npy-files and self-defined slices
 
 Extra: psychoacoustics_processing: optimized for Excel_table_template after conversion to .json, analyses psychoacoustic data automatically, with statistics and boxplot, saved into a text file
+
+python_talairach_plots: for dipole plotting, see instructions inside
