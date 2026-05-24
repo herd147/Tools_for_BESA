@@ -4,16 +4,16 @@ from typing import Callable, Dict, Tuple, List
 import numpy as np
 
 # Define slices here, interval (index) of N1
-    POR_irn = slice()
-    PCR_irn = slice()
-    POR_hp_pt = slice()
-    PCR_hp_pt = slice() 
-    POR_hp_ctrl = slice() 
-    PCR_hp_ctrl = slice()
-    CR_rho_pm_pt = slice()
-    CR_rho_pm_ctrl = slice() 
-    CR_rho_mp_pt = slice() 
-    CR_rho_mp_ctrl = slice()
+POR_irn = slice()
+PCR_irn = slice()
+POR_hp_pt = slice()
+PCR_hp_pt = slice()
+POR_hp_ctrl = slice()
+PCR_hp_ctrl = slice()
+CR_rho_pm_pt = slice()
+CR_rho_pm_ctrl = slice()
+CR_rho_mp_pt = slice()
+CR_rho_mp_ctrl = slice()
 
 
 @dataclass
@@ -100,28 +100,6 @@ def bootstrap_t_interval_vector(x_matrix: np.ndarray,
     return BootstrapTVectorResult(theta_hat, se_hat, intervals[0], intervals[1])
 
 
-def get_individual_minima(matrix: np.ndarray, t_pts: np.ndarray, idx_slice: slice):
-    """Extracts peak latency and amplitude for every subject individually."""
-    sub_m, sub_t = matrix[idx_slice, :], t_pts[idx_slice]
-    idx = np.argmin(sub_m, axis=0)
-    return sub_t[idx], sub_m[idx, np.arange(matrix.shape[1])]
-
-
-def calculate_hedges_g(group_pat, group_ctrl):
-    """Calculates Hedges' g (positive value means Patients > Controls)."""
-    n1, n2 = len(group_pat), len(group_ctrl)
-    pooled_var = ((n1-1) * np.var(group_pat, ddof=1) + 
-                  (n2-1) * np.var(group_ctrl, ddof=1)) / (n1 + n2 - 2)
-    s_pooled = np.sqrt(pooled_var)
-    
-    if s_pooled == 0:
-        return 0.0
-        
-    d = (np.mean(group_pat) - np.mean(group_ctrl)) / s_pooled
-    correction = 1 - (3 / (4 * (n1 + n2) - 9))
-    return d * correction
-
-
 # ---------------------------------------------------------------------
 # Main Execution
 # ---------------------------------------------------------------------
@@ -197,32 +175,5 @@ if __name__ == "__main__":
                 except Exception as e:
                     log(f"  Error processing {group}: {e}")
 
-            # 2. Group Comparisons
-            log(f"\n--- GROUP COMPARISON: {condition.upper()} ---")
-            for ana_name in [a["name"] for a in setup["Patient"]["analyses"]]:
-                p_res = results_storage[condition]["Patient"].get(ana_name)
-                c_res = results_storage[condition]["Control"].get(ana_name)
-                
-                if p_res and c_res:
-                    # Significance via CI Overlap
-                    sig_lat = not (max(p_res.ci_latency[0], c_res.ci_latency[0]) < 
-                                   min(p_res.ci_latency[1], c_res.ci_latency[1]))
-                    sig_amp = not (max(p_res.ci_amplitude[0], c_res.ci_amplitude[0]) < 
-                                   min(p_res.ci_amplitude[1], c_res.ci_amplitude[1]))
-                    
-                    # Effect Size (Hedges' g)
-                    sl_p = next(a["range"] for a in setup["Patient"]["analyses"] if a["name"] == ana_name)
-                    sl_c = next(a["range"] for a in setup["Control"]["analyses"] if a["name"] == ana_name)
-                    
-                    ind_lat_p, ind_amp_p = get_individual_minima(matrices["Patient"], time_points, sl_p)
-                    ind_lat_c, ind_amp_c = get_individual_minima(matrices["Control"], time_points, sl_c)
-                    
-                    g_lat = calculate_hedges_g(ind_lat_p, ind_lat_c)
-                    # Flip amplitude g so positive means Patients are "stronger" (more negative)
-                    g_amp = -calculate_hedges_g(ind_amp_p, ind_amp_c) 
-
-                    log(f"  [{ana_name}]")
-                    log(f"    Latency:   {'**SIGNIFICANT**' if sig_lat else 'Overlap (n.s.)'} | g = {g_lat:.3f}")
-                    log(f"    Amplitude: {'**SIGNIFICANT**' if sig_amp else 'Overlap (n.s.)'} | g = {g_amp:.3f}")
 
     print(f"\nAnalysis complete. Results written to {OUTPUT_FILE}")
